@@ -1,0 +1,30 @@
+# Import necessary libraries
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import linear_kernel
+
+# Load the data
+videos = pd.read_csv('videos.csv')
+
+# Create a TF-IDF matrix for the video descriptions
+tfidf = TfidfVectorizer(stop_words='english')
+tfidf_matrix = tfidf.fit_transform(videos['description'].fillna(''))
+
+# Compute the cosine similarity matrix
+cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
+
+# Get the top recommendations for a user based on their interests
+def recommend_videos(user_interests, num_recommendations=10):
+    # Create a TF-IDF vector for the user interests
+    user_tfidf = tfidf.transform([user_interests])
+    
+    # Compute the cosine similarities between the user interests vector and the video descriptions
+    cosine_sim_user = linear_kernel(user_tfidf, tfidf_matrix).flatten()
+    
+    # Get the indices of the top similar videos
+    similar_indices = cosine_sim_user.argsort()[:-num_recommendations-1:-1]
+    
+    # Get the video IDs and titles of the top similar videos
+    recommendations = videos.iloc[similar_indices][['video_id', 'title']]
+    
+    return recommendations
