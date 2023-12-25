@@ -1,0 +1,18 @@
+from fbprophet import Prophet
+import pandas as pd
+
+# Load time series data
+df = pd.read_csv('your_time_series_data.csv')
+
+# Prepare data in Prophet format
+prophet_data = df.rename(columns={'timestamp_column': 'ds', 'value_column': 'y'})
+
+# Initialize and fit Prophet model
+model = Prophet()
+model.fit(prophet_data)
+
+# Create future dataframe for prediction
+future = model.make_future_dataframe(periods=365)
+
+# Generate forecast
+forecast = model.predict(future)
