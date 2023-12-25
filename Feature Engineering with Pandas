@@ -1,0 +1,13 @@
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+# Load data (replace 'your_dataset.csv' with your actual dataset)
+df = pd.read_csv('your_dataset.csv')
+
+# Feature engineering: Scaling and creating new features
+scaler = StandardScaler()
+df['scaled_feature'] = scaler.fit_transform(df['original_feature'].values.reshape(-1, 1))
+df['new_feature'] = df['feature1'] * df['feature2']
+
+# Drop unnecessary columns
+df.drop(['original_feature', 'feature1', 'feature2'], axis=1, inplace=True)
