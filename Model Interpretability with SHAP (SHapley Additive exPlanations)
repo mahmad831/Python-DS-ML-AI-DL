@@ -1,0 +1,20 @@
+import shap
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import load_breast_cancer
+
+# Load dataset
+data = load_breast_cancer()
+X, y = data.data, data.target
+
+# Train a model (replace with your preferred model)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X, y)
+
+# Initialize SHAP explainer
+explainer = shap.TreeExplainer(model)
+
+# Calculate SHAP values for a specific instance
+shap_values = explainer.shap_values(X[0])
+
+# Summary plot for feature importance
+shap.summary_plot(shap_values, X)
