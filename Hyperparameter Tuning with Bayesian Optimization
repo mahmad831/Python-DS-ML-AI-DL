@@ -1,0 +1,23 @@
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.ensemble import RandomForestRegressor
+import numpy as np
+
+# Load time series data
+# Assume X and y are your features and target variable
+
+# Initialize time series cross-validation
+tscv = TimeSeriesSplit(n_splits=5)
+
+# Train a model using time series cross-validation
+model = RandomForestRegressor(n_estimators=100)
+
+for train_index, test_index in tscv.split(X):
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+    
+    # Evaluate model performance (e.g., using mean squared error)
+    mse = np.mean((y_test - predictions)**2)
+    print(f'Mean Squared Error: {mse}')
