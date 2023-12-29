@@ -1,0 +1,32 @@
+# Import necessary libraries
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+from sklearn import tree
+
+# Load the Iris dataset for demonstration
+iris = datasets.load_iris()
+X = iris.data[:, :2]  # Using only the first two features for simplicity
+y = iris.target
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Random Forest classifier
+random_forest_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+random_forest_classifier.fit(X_train, y_train)
+
+# Make predictions
+y_pred = random_forest_classifier.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+
+# Visualize one of the decision trees in the Random Forest
+plt.figure(figsize=(12, 8))
+tree.plot_tree(random_forest_classifier.estimators_[0], filled=True, feature_names=iris.feature_names[:2], class_names=iris.target_names)
+plt.title('Random Forest Decision Tree Example')
+plt.show()
