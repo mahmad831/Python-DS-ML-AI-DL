@@ -1,0 +1,30 @@
+# Import necessary libraries
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import Ridge
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+
+# Generate some random data for demonstration
+np.random.seed(42)
+X = 2 * np.random.rand(100, 1)
+y = 4 + 3 * X + np.random.randn(100, 1)
+
+# Create a Ridge Regression model
+ridge_model = make_pipeline(StandardScaler(), Ridge(alpha=1.0))
+
+# Train the model
+ridge_model.fit(X, y)
+
+# Make predictions
+X_new = np.array([[0], [2]])
+y_pred = ridge_model.predict(X_new)
+
+# Plot the data and the Ridge Regression line
+plt.scatter(X, y, label='Data points')
+plt.plot(X_new, y_pred, 'r-', label='Ridge Regression')
+plt.xlabel('X-axis')
+plt.ylabel('y-axis')
+plt.title('Ridge Regression Example')
+plt.legend()
+plt.show()
