@@ -1,0 +1,44 @@
+# Import necessary libraries
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+
+# Load the Iris dataset for demonstration
+iris = datasets.load_iris()
+X = iris.data[:, :2]  # Using only the first two features for simplicity
+y = iris.target
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create an SVM classifier
+svm_classifier = SVC(kernel='linear', C=1)
+svm_classifier.fit(X_train, y_train)
+
+# Make predictions
+y_pred = svm_classifier.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+
+# Plot the decision boundary
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.coolwarm)
+ax = plt.gca()
+xlim = ax.get_xlim()
+ylim = ax.get_ylim()
+
+# Create grid to evaluate model
+xx, yy = np.meshgrid(np.linspace(xlim[0], xlim[1], 50), np.linspace(ylim[0], ylim[1], 50))
+Z = svm_classifier.decision_function(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+
+# Plot decision boundary and margins
+ax.contour(xx, yy, Z, colors='k', levels=[-1, 0, 1], alpha=0.5, linestyles=['--', '-', '--'])
+plt.title('Support Vector Machine (SVM) Classification Example')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
